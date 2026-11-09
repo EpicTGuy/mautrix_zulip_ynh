@@ -1,0 +1,118 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/manifest.v2.schema.json
+
+packaging_format = 2
+
+id = "mautrix_zulip"
+name = "Mautrix Zulip"
+
+description.en = "Matrix / Synapse puppeting bridge for Zulip"
+description.fr = "Passerelle Matrix / Synapse pour Zulip"
+version = "0.2511.0~ynh1"
+
+maintainers = ["EpicTGuy"]
+
+[upstream]
+license = "AGPL-3.0-or-later"
+website = "https://github.com/mautrix/zulip"
+code = "https://github.com/mautrix/zulip"
+admindoc = "https://docs.mau.fi/bridges/go/zulip/index.html"
+fund = "https://github.com/sponsors/tulir"
+
+[integration]
+yunohost = ">= 12.1.17"
+helpers_version = "2.1"
+architectures = ["amd64", "arm64", "armhf"]
+multi_instance = true
+ldap = "not_relevant"
+sso = "not_relevant"
+disk = "1G"
+ram.build = "128M"
+ram.runtime = "128M"
+
+[install]
+
+    [install.synapse_instance]
+    ask.en = "Choose the local Synapse instance to communicate with mautrix_zulip."
+    ask.fr = "Choisissez l'instance Synapse qui doit communiquer avec mautrix_zulip."
+    type = "app"
+    #pattern.regexp = "synapse(__)*[0-9]*"
+    #pattern.error = "Invalid app selected. Please select a Synapse instance."
+    help.en = "Usually the Synapse instances contain a number after it is installed more than one time. E.g. synapse__1 will be the second instance."
+    help.fr = "En général, les instances de Synapse contiennent un numéro après avoir été installées plus d'une fois. Par exemple, synapse__1 sera la deuxième instance."
+    default = "synapse"
+
+    [install.botname]
+    ask.en = "Choose a local Synapse user name for the Zulip bot."
+    ask.fr = "Choisissez un nom d'utilisateur Synapse local pour le robot Zulip."
+    type = "string"
+    example = "zulipbot"
+    help.en = "A system user will be created. Invite @zulipbot:localsynapse.servername from an authorized Matrix account to start bridging. Give the Matrix server_name, not the full domain/URL."
+    help.fr = "Un utilisateur système sera créé. Inviter @zulipbot:localsynapse.servername depuis un compte Matrix autorisé pour démarrer une passerelle. Donner le nom du serveur Matrix, pas le domaine/URL complet."
+    default = "zulipbot"
+
+    [install.encryption]
+    ask.en = "Enable end-to-bridge encryption?"
+    ask.fr = "Activer le chiffrement entre Synapse et le bridge ?"
+    type = "boolean"
+    help.en = "Only activate if you know the prerequisites and constraints related to E2B."
+    help.fr = "N'activer que si vous connaissez les prérequis et constraintes liées à E2B."
+    default = true
+
+    [install.botadmin]
+    ask.en = "Choose the Matrix account administrator of the Zulip bot."
+    ask.fr = "Choisissez le compte Matrix administrateur du robot Zulip."
+    type = "string"
+    help.en = "The administrator does not need to be a local Synapse account. Valid formats are @johndoe:localsynapse.servername or @johndoe:matrix.org"
+    help.fr = "L'administrateur peut ne pas être un compte local Synapse. Les formats valables sont @johndoe:localsynapse.servername or @johndoe:matrix.org"
+    example = "@johndoe:matrix.org"
+
+    [install.botusers]
+    ask.en = "Choose Matrix user(s) authorized to bridge with the Zulip bot."
+    ask.fr = "Choisissez le/les compte(s) Matrix autorisés à utiliser la passerelle Zulip."
+    type = "string"
+    example = "@johndoe:server.name or server.name or *"
+    help.en = "A remote or local user (@johndoe:server.name),the local server (server.name), a remote server (matrix.org), or all remote/local servers (*) can be authorized. Give the Matrix server_name, not the full domain/URL. It is also possible to specify multiple values by separating them with comma. Example: @johndoe:server.name,domain.tld,matrix.org"
+    help.fr = "Un compte local ou distant (@johndoe:server.name), le serveur local (server.name), un serveur distant (matrix.org), ou tous les serveurs remote/local (*). Donner le nom du serveur Matrix, pas le domaine/URL complet. Il est également possible de spécifier plusieurs valeurs en les séparant par une virgule. Exemple : @johndoe:server.name,domain.tld,matrix.org"
+
+    [install.enable_relaybot]
+    ask.en = "Choose whether to enable the relay bot feature."
+    ask.fr = "Choisissez si vous souhaitez activer la fonctionnalité de robot-relai."
+    help.en = "If enabled, allows to use a single Zulip account (bot) to forward messages from multiple Matrix users. Messages will appear on Zulip as if originating from a single user, with a prefix that indicates who is talking."
+    help.fr = "Si activé, permet d'utiliser un seul compte Zulip (bot) pour transmettre les messages de multiples utilisateurs Matrix. Les messages apparaîtront sur Zulip comme envoyés par un seul utilisateur, avec un préfixe indiquant leur auteur."
+    type = "boolean"
+    default = true
+
+[resources]
+    [resources.sources]
+        [resources.sources.main]
+        in_subdir = false
+        extract = false
+        rename = "mautrix-zulip"
+        amd64.url = "https://github.com/mautrix/zulip/releases/download/v0.2511.0/mautrix-zulip-amd64"
+        amd64.sha256 = "f8e7a2c61e9695c55c28470e6052c8c57a54e79bcb21920a7f13aae4c7679a3e"
+        arm64.url = "https://github.com/mautrix/zulip/releases/download/v0.2511.0/mautrix-zulip-arm64"
+        arm64.sha256 = "dd5066d33714f2c1315addb236853543ffa5ff54183fbbdc6ccc2e8d4d7960a6"
+        armhf.url = "https://github.com/mautrix/zulip/releases/download/v0.2511.0/mautrix-zulip-arm"
+        armhf.sha256 = "7c9662062ce3a56bc9a86e8503d81c58804d3ee69e4d558ab8eb56a49643aea6"
+
+        autoupdate.strategy = "latest_github_release"
+        autoupdate.asset.amd64 = "^mautrix-zulip-amd64$"
+        autoupdate.asset.arm64 = "^mautrix-zulip-arm64$"
+        autoupdate.asset.armhf = "^mautrix-zulip-arm$"
+
+    [resources.system_user]
+
+    [resources.install_dir]
+
+    [resources.permissions]
+#    main.allowed = "all_users"
+#    main.auth_header = false
+
+    [resources.ports]
+    main.default = 29342
+
+    [resources.apt]
+    packages = "postgresql, ffmpeg"
+
+    [resources.database]
+    type = "postgresql"
