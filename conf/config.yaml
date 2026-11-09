@@ -209,7 +209,7 @@ appservice:
         username: __BOTNAME__
         # Display name and avatar for bot. Set to "remove" to remove display name/avatar, leave empty
         # to leave display name/avatar as-is.
-        displayname: __DISPLAYNAME__
+        displayname: '__DISPLAYNAME_YAML__'
         avatar: __AVATAR__
 
     # Whether to receive ephemeral events via appservice transactions.
@@ -312,7 +312,7 @@ direct_media:
     allow_proxy: true
     # Matrix server signing key to make the federation tester pass, same format as synapse's .signing.key file.
     # This key is also used to sign the mxc:// URIs to ensure only the bridge can generate them.
-    server_key: __DIRECT_MEDIA_SERVER_KEY__
+    server_key: ed25519 __DIRECT_MEDIA_KEY_ID__ __DIRECT_MEDIA_SEED_KEY__
 
 # Settings for backfilling messages.
 # Note that the exact way settings are applied depends on the network connector.
