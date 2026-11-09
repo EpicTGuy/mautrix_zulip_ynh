@@ -69,7 +69,6 @@ pickle_key=$(ynh_string_random)
 # Logging config. See https://github.com/tulir/zeroconfig for details.
 print_level="info"
 
-
 ynh_app_setting_set --key=personal_filtering_spaces --value="$personal_filtering_spaces"
 ynh_app_setting_set --key=enable_relaybot --value="$enable_relaybot"
 ynh_app_setting_set --key=admin_only --value="$admin_only"
